@@ -9,4 +9,18 @@ const createCourseValidator = Joi.object().keys({
   id_teacher: Joi.number().required(),
 });
 
-export { createTeacherValidator, createCourseValidator };
+const createSessionValidator = Joi.object().keys({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
+const checkTokenValidator = Joi.object({
+  authorization: Joi.string().required(),
+}).unknown();
+
+export {
+  createTeacherValidator,
+  createCourseValidator,
+  createSessionValidator,
+  checkTokenValidator,
+};

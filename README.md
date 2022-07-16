@@ -8,6 +8,8 @@ Está api/back-end foi implementada como solução de implementação prática d
 * ExpressJs
 * Celebrate
 * Sequelize
+* JWT
+* BcryptJs
 * PostgreSQL
 * Docker
 * docker-compose
