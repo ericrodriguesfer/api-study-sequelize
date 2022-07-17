@@ -4,13 +4,17 @@ import ListAllCoursesWithTeacherService from "../services/courses/ListAllCourses
 
 class CourseController {
   async listAll(request, response) {
-    const courses = await ListAllCoursesService.execute();
+    const { page, size } = request.query;
+
+    const courses = await ListAllCoursesService.execute(page, size);
 
     return response.status(200).json(courses);
   }
 
   async listAllWithTeacher(request, response) {
-    const courses = await ListAllCoursesWithTeacherService.execute();
+    const { page, size } = request.query;
+
+    const courses = await ListAllCoursesWithTeacherService.execute(page, size);
 
     return response.status(200).json(courses);
   }

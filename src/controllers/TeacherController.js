@@ -3,7 +3,9 @@ import ListAllTeachersService from "../services/teachers/ListAllTeachersService.
 
 class TeacherController {
   async listAll(request, response) {
-    const teachers = await ListAllTeachersService.execute();
+    const { page, size } = request.query;
+
+    const teachers = await ListAllTeachersService.execute(page, size);
 
     return response.status(200).json(teachers);
   }

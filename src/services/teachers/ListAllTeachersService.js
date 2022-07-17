@@ -1,10 +1,15 @@
+import { getPagination, getPagingData } from "../../config/pagination.js";
 import Teacher from "../../models/Teacher.js";
 
 class ListAllTeachersService {
-  async execute() {
-    const teachers = await Teacher.findAll();
+  async execute(page, size) {
+    const { limit, offset } = getPagination(page, size);
 
-    return teachers;
+    const teachers = await Teacher.findAndCountAll({ limit, offset });
+
+    const paginatedTeachers = getPagingData(teachers, page, limit);
+
+    return paginatedTeachers;
   }
 }
 

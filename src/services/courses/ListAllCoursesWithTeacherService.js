@@ -1,12 +1,19 @@
+import { getPagination, getPagingData } from "../../config/pagination.js";
 import Course from "../../models/Course.js";
 
 class ListAllCoursesWithTeacherService {
-  async execute() {
-    const courses = await Course.findAll({
+  async execute(page, size) {
+    const { limit, offset } = getPagination(page, size);
+
+    const courses = await Course.findAndCountAll({
       include: { association: "teachers" },
+      limit,
+      offset,
     });
 
-    return courses;
+    const paginatedCoursers = getPagingData(courses, page, limit);
+
+    return paginatedCoursers;
   }
 }
 
