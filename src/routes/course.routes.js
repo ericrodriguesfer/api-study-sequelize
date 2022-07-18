@@ -3,6 +3,7 @@ import { Router } from "express";
 
 import CourseController from "../controllers/CourseController.js";
 import authenticated from "../middlewares/authenticated.js";
+import isAdmin from "../middlewares/isAdmin.js";
 import {
   checkTokenValidator,
   createCourseValidator,
@@ -24,6 +25,7 @@ courses.get(
 );
 courses.post(
   "/",
+  isAdmin,
   celebrate(
     { [Segments.BODY]: createCourseValidator },
     { [Segments.HEADERS]: checkTokenValidator }

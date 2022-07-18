@@ -1,8 +1,9 @@
-CREATE TABLE IF NOT EXISTS public.admins (
+CREATE TABLE IF NOT EXISTS public.users (
 	id SERIAL NOT NULL PRIMARY KEY,
 	name VARCHAR(100) NOT NULL,
 	email VARCHAR(100) NOT NULL,
 	password VARCHAR(250) NOT NULL,
+	isAdmin BOOLEAN NOT NULL,
 	created_at TIMESTAMP NOT NULL,
 	updated_at TIMESTAMP NOT NULL,
 
@@ -26,11 +27,12 @@ CREATE TABLE IF NOT EXISTS public.courses (
   	CONSTRAINT courses_teacher_fkey FOREIGN KEY (id_teacher) REFERENCES public.teachers(id)
 );
 
-ALTER TABLE public.admins OWNER TO "postgres";
+ALTER TABLE public.users OWNER TO "postgres";
 ALTER TABLE public.teachers OWNER TO "postgres";
 ALTER TABLE public.courses OWNER TO "postgres";
 
-INSERT INTO public.admins (name, email, password, created_at, updated_at) VALUES ('Admin Test', 'admin.test@gmail.com', '$2y$08$iTQcaY.q5IrJ1iNBwablAO5c/SeTtaRQvoOABfMSpA2MHHqptoItW', '2022-07-16T18:42:36.719Z', '2022-07-16T18:42:36.719Z');
+INSERT INTO public.users (name, email, password, isAdmin, created_at, updated_at) VALUES ('Admin Test', 'admin.test@gmail.com', '$2y$08$iTQcaY.q5IrJ1iNBwablAO5c/SeTtaRQvoOABfMSpA2MHHqptoItW', TRUE, '2022-07-16T18:42:36.719Z', '2022-07-16T18:42:36.719Z');
+INSERT INTO public.users (name, email, password, isAdmin, created_at, updated_at) VALUES ('User Test', 'user.test@gmail.com', '$2y$08$iTQcaY.q5IrJ1iNBwablAO5c/SeTtaRQvoOABfMSpA2MHHqptoItW', FALSE, '2022-07-16T18:42:36.719Z', '2022-07-16T18:42:36.719Z');
 
 INSERT INTO public.teachers (name, created_at, updated_at) VALUES ('Maria Góis Santos', '2022-07-16T18:42:36.719Z', '2022-07-16T18:42:36.719Z');
 INSERT INTO public.teachers (name, created_at, updated_at) VALUES ('João da Silva', '2022-07-16T18:42:36.719Z', '2022-07-16T18:42:36.719Z');

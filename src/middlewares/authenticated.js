@@ -15,12 +15,13 @@ function authenticated(request, response, next) {
 
     const decoded = jwt.verify(token, secret);
 
-    const { id, name, email } = decoded;
+    const { id, name, email, isAdmin } = decoded;
 
-    request.admin = {
+    request.user = {
       id,
       name,
       email,
+      isAdmin,
     };
 
     return next();

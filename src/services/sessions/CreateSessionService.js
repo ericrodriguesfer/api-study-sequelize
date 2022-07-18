@@ -3,13 +3,13 @@ import jwt from "jsonwebtoken";
 
 import { expiresIn, secret } from "../../config/jwt.js";
 import AppError from "../../errors/AppError.js";
-import Admin from "../../models/Admin.js";
+import User from "../../models/User.js";
 
 class CreateSessionService {
   async execute(email, password) {
-    const admin = await Admin.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email } });
 
-    if (!admin) {
+    if (!user) {
       throw new AppError(
         "This user does not exists in our database",
         "NotFound Request",
@@ -17,7 +17,7 @@ class CreateSessionService {
       );
     }
 
-    if (!(await bcryptjs.compare(password, admin.password))) {
+    if (!(await bcryptjs.compare(password, user.password))) {
       throw new AppError(
         "This password repassed does not match",
         "Unauthorized",
@@ -26,7 +26,12 @@ class CreateSessionService {
     }
 
     return jwt.sign(
-      { id: admin.id, name: admin.name, email: admin.email },
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isadmin,
+      },
       secret,
       { expiresIn: expiresIn }
     );
