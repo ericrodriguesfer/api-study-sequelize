@@ -9,6 +9,7 @@ Está api/back-end foi implementada como solução de implementação prática d
 * Celebrate
 * Sequelize
 * JWT
+* Swagger
 * BcryptJs
 * PostgreSQL
 * Docker

@@ -8,7 +8,7 @@ function authenticated(request, response, next) {
     const header = request.headers.authorization;
 
     if (!header) {
-      throw new AppError("Token JWT is missing", "Bad Request", 400);
+      throw new AppError("Token JWT is missing", "Unauthorized", 401);
     }
 
     const [beader, token] = header.split(" ");

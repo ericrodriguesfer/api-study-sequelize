@@ -1,0 +1,483 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Api study Sequelize ORM.",
+    "description": "Essa API foi implementada com o objetivo de realizar um estudo de viabilidade do ORM Sequelize, com o cenário de login de usuários e admins, bem como cadastro de professores e cursos.",
+    "contact": {
+      "email": "ericdesenvolvedor7@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "API local."
+    }
+  ],
+  "paths": {
+    "/session": {
+      "post": {
+        "summary": "Login de usuários.",
+        "description": "Está rota irá realizar o login de um usuário e retornar para o mesmo um token.",
+        "tags": ["Session"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Session"
+              },
+              "examples": {
+                "teacher": {
+                  "value": {
+                    "email": "fulano@gmail.com",
+                    "password": "qwe123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "This password repassed does not match"
+          },
+          "404": {
+            "description": "This user does not exists in our database"
+          },
+          "500": {
+            "description": "Error intern in server, please try again"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teacher": {
+      "get": {
+        "summary": "Listagem de professores.",
+        "description": "Está rota irá listar todos os professores presentes no banco de dados da nossa aplicação.",
+        "tags": ["Teacher"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "type": "number",
+            "in": "query",
+            "description": "Número da página na listagem.",
+            "required": false
+          },
+          {
+            "name": "size",
+            "type": "number",
+            "in": "query",
+            "description": "Quantidade de elementos listados por página.",
+            "required": false
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token JWT is missing"
+          },
+          "500": {
+            "description": "Error intern in server, please try again OR This JWT token is invalid"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "totalItems": {
+                        "type": "number"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      },
+                      "totalPages": {
+                        "type": "number"
+                      },
+                      "currentPage": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastro de professores.",
+        "description": "Está rota irá registrar um professor no banco de dados da aplicação.",
+        "tags": ["Teacher"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Teacher"
+              },
+              "examples": {
+                "teacher": {
+                  "value": {
+                    "name": "Fulano de Tal"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Token JWT is missing OR The user not is admin roles"
+          },
+          "409": {
+            "description": "There is already a teacher with that name"
+          },
+          "500": {
+            "description": "Error intern in server, please try again OR This JWT token is invalid"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/courses": {
+      "get": {
+        "summary": "Listagem de cursos.",
+        "description": "Está rota irá listar todos os cursos presentes no banco de dados da nossa aplicação.",
+        "tags": ["Courses"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "type": "number",
+            "in": "query",
+            "description": "Número da página na listagem.",
+            "required": false
+          },
+          {
+            "name": "size",
+            "type": "number",
+            "in": "query",
+            "description": "Quantidade de elementos listados por página.",
+            "required": false
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token JWT is missing"
+          },
+          "500": {
+            "description": "Error intern in server, please try again OR This JWT token is invalid"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "totalItems": {
+                        "type": "number"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "id_teacher": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      },
+                      "totalPages": {
+                        "type": "number"
+                      },
+                      "currentPage": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastro de cursos.",
+        "description": "Está rota irá registrar um curso no banco de dados da aplicação.",
+        "tags": ["Courses"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Course"
+              },
+              "examples": {
+                "teacher": {
+                  "value": {
+                    "name": "Curso tal",
+                    "id_teacher": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Token JWT is missing OR The user not is admin roles"
+          },
+          "404": {
+            "description": "Teacher does not exists in our database"
+          },
+          "409": {
+            "description": "There is already a course with that name"
+          },
+          "500": {
+            "description": "Error intern in server, please try again OR This JWT token is invalid"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "id_teacher": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/courses/with-teacher": {
+      "get": {
+        "summary": "Listagem de cursos com seus professores.",
+        "description": "Está rota irá listar todos os cursos com os professores associados ao mesmo presentes no banco de dados da nossa aplicação.",
+        "tags": ["Courses"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "type": "number",
+            "in": "query",
+            "description": "Número da página na listagem.",
+            "required": false
+          },
+          {
+            "name": "size",
+            "type": "number",
+            "in": "query",
+            "description": "Quantidade de elementos listados por página.",
+            "required": false
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token JWT is missing"
+          },
+          "500": {
+            "description": "Error intern in server, please try again OR This JWT token is invalid"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "totalItems": {
+                        "type": "number"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "id_teacher": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      },
+                      "totalPages": {
+                        "type": "number"
+                      },
+                      "currentPage": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Teacher": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Course": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id_teacher": {
+            "type": "number"
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

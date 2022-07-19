@@ -2,7 +2,9 @@ import { errors } from "celebrate";
 import dotenv from "dotenv";
 import express from "express";
 import "express-async-errors";
+import swaggerUi from "swagger-ui-express";
 
+import swaggerDocs from "../../swagger.json" assert { type: "json" };
 import "../database/index.js";
 import AppError from "../errors/AppError.js";
 import routes from "../routes/index.js";
@@ -12,6 +14,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(routes);
 app.use(errors());
 app.use((error, request, response, next) => {
